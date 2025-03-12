@@ -1,5 +1,16 @@
-controllers:
+backend_controllers:
     resource:
-        path: ../src/Controller/
-        namespace: App\Controller
+        path: ../src/Controller/Backend/
+        namespace: App\Controller\Backend
+    type: attribute
+    prefix: '/mtc-admin'
+
+webapp_controllers:
+    resource:
+        path: ../src/Controller/WebApp/
+        namespace: App\Controller\WebApp
+    type: attribute
+
+kernel:
+    resource: App\Kernel
     type: attribute

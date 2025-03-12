@@ -1,0 +1,68 @@
+{% extends 'base.html.twig' %}
+{% set is_edit = test is defined and test.id is not null %}
+
+{% block title %}{{ is_edit ? 'Edit test' : 'Create test' }}{% endblock %}
+
+{% block body %}
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h2>{{ is_edit ? 'Edit test' : 'Create test' }}</h2>
+        <div class="btn-toolbar mb-2 mb-md-0">
+            <div class="btn-group me-2">
+                <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
+            </div>
+        </div>
+    </div>
+
+    {{ form_errors(form) }}
+
+    {{ form_start(form) }}
+
+        <div class="row gy-3">
+            <div class="col-md-6">
+                {{ form_row(form.title) }}
+            </div>
+
+            <div class="col-md-6">
+                {{ form_row(form.language) }}
+            </div>
+
+            <div class="col-md-12">
+                {{ form_row(form.description) }}
+            </div>
+        </div>
+
+        <hr class="my-4">
+
+        <h4 class="mb-3">Type</h4>
+
+        <div class="my-3">
+            {{ form_row(form.type) }}
+        </div>
+
+        <hr class="my-4">
+
+        <div class="row gy-3">
+            <div class="col-md-6">
+                {{ form_row(form.questionsCount) }}
+            </div>
+            <div class="col-md-6">
+                {{ form_row(form.successQuote) }}
+            </div>
+            <div class="col-md-6">
+                {{ form_row(form.answersCount) }}
+            </div>
+            <div class="col-md-6">
+                {{ form_row(form.rightAnswersCount) }}
+            </div>
+        </div>
+
+        <hr class="my-4">
+
+        {{ form_row(form.submit, {
+            'label': is_edit ? 'save' : 'create'
+        }) }}
+
+        <div class="my-4"></div>
+
+    {{ form_end(form) }}
+{% endblock %}

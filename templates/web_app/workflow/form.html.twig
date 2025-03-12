@@ -1,0 +1,57 @@
+<form {{ stimulus_action('web-app', 'onSubmitAnswers') }}>
+    <div id="stepControls" class="carousel carousel-dark slide mb-3" data-bs-ride="false" data-bs-wrap="false">
+        <div class="carousel-inner" style="min-height: 150px;">
+            {% set total = questionCollection|length %}
+            {% if isLearning %}
+                {% for _q in questionCollection %}
+                    {% set questionIndex = loop.index0 %}
+                    {% set questionNumber = loop.index %}
+                    <div class="carousel-item{{ questionIndex == 0 ? ' active' : '' }}">
+                        <h5><span class="badge bg-light text-dark">{{ questionNumber }} von {{ total }}</span> {{ _q.explanation_headline }}</h5>
+                        <p>{{ _q.explanation_text }}</p>
+                    </div>
+                {% endfor %}
+                <div class="carousel-item">
+                    <p>Sie haben alle Informationen bekommen, jetzt können Sie die Fragen beantworten.</p>
+                </div>
+            {% endif %}
+            {% for _q in questionCollection %}
+                {% set questionIndex = loop.index0 %}
+                {% set questionNumber = loop.index %}
+                <div class="carousel-item{{ not isLearning and questionIndex == 0 ? ' active' : '' }}">
+                    {% set rightAnswers = count_right_answers(_q) %}
+                    <h5>{{ _q.question }}</h5>
+                    {% set progress = (questionNumber * 100) / total %}
+                    <div class="progress mt-3 mb-3">
+                        <div class="progress-bar" role="progressbar" style="width: {{ progress }}%;" aria-valuemin="0" aria-valuemax="100">{{ 'Frage ' ~ questionNumber ~ ' von ' ~ total }}</div>
+                    </div>
+                    {% if rightAnswers > 1 %}
+                        <p class="fst-italic">bitte {{ rightAnswers }} richtigen Antworten auswählen</p>
+                    {% endif %}
+                    {% set type = rightAnswers > 1 ? 'checkbox' : 'radio' %}
+                    {% for _a in _q.answers %}
+                        {% set answerIndex = loop.index0 %}
+                        <div class="form-check">
+                            <input class="form-check-input" type="{{ type }}" name="answers[{{ questionIndex }}][]" id="answer_{{ questionIndex }}_{{ answerIndex }}" value="{{ answerIndex }}">
+                            <label class="form-check-label" for="answer_{{ questionIndex }}_{{ answerIndex }}">
+                                {{ _a.answer }}
+                            </label>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+            <div class="carousel-item">
+                <p>Sie haben alle Fragen beantwortet, jetzt können Sie die Daten zur Prüfung übergeben.</p>
+                <input type="hidden" name="email" value="{{ email }}">
+                <input type="hidden" name="test_hash" value="{{ hash }}">
+                <input type="submit" class="btn btn-primary" value="Absenden">
+            </div>
+        </div>
+    </div>
+    <button type="button" class="btn btn-light" data-bs-target="#stepControls" data-bs-slide="prev">
+        Zurück
+    </button>
+    <button type="button" class="btn btn-dark" data-bs-target="#stepControls" data-bs-slide="next">
+        Weiter
+    </button>
+</form>

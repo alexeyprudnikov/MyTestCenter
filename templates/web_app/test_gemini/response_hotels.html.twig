@@ -1,0 +1,34 @@
+<div class="mb-4">
+    Request Ausführungszeit: {{ executionTime }} s<br>
+    <a data-bs-toggle="collapse" href="#dumpData" aria-expanded="false" aria-controls="dumpData">
+        Response-Datenstruktur anzeigen
+    </a>
+    <div class="collapse mt-4" id="dumpData">
+        <div class="card card-body">
+            {{ dump(list) }}
+        </div>
+    </div>
+</div>
+{% if list|length < 2 %}
+    Fehler: {{ list[0] ?? 'no api response data' }}
+{% else %}
+    <h3>Hotels in Mittelerde</h3>
+    {% for hotel in list %}
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">{{ hotel.name }}</h5>
+                <p class="card-text">
+                    <span class="badge bg-primary rounded-pill">{{ hotel.location }}</span> {{ hotel.description }}
+                </p>
+                <ul class="list-group list-group-flush mb-3">
+                    {% for feature in hotel.features %}
+                        <li class="list-group-item">
+                            <i class="{{ feature.icon }}"></i> {{ feature.title }}
+                        </li>
+                    {% endfor %}
+                </ul>
+                <p class="card-subtitle text-muted"><span class="badge bg-danger rounded-pill">Warnung!</span> {{ hotel.dangers }}</p>
+            </div>
+        </div>
+    {% endfor %}
+{% endif %}

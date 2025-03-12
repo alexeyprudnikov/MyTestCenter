@@ -1,0 +1,61 @@
+{% extends 'web_app.html.twig' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block body %}
+    <div {{ stimulus_controller('test-gemini') }} class="container mt-3">
+        <div class="row d-flex justify-content-center">
+            <div class="col-lg-6">
+                <h4>Google Gemini Generative AI</h4>
+                <div {{ stimulus_target('test-gemini', 'content') }}>
+                    <hr>
+                    <div class="mb-3">
+                        <b>Thema:</b> 5 beliebtesten deutschen Fleischrezepte.
+                    </div>
+                    <button type="button" data-bs-toggle="modal" data-bs-target="#dataModal_1" class="btn btn-primary">
+                        Api Response-Schema anzeigen
+                    </button>
+                    <button {{ stimulus_action('test-gemini', 'onRequestRecipes') }} type="button" class="btn btn-success">
+                        Api-Request ausführen
+                    </button>
+                    <div class="modal fade" id="dataModal_1" tabindex="-1" aria-labelledby="dataModalLabel_1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-scrollable modal-fullscreen">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="dataModalLabel_1">Api Response-Schema</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <pre>{{ responseSchemaRecipes|json_encode(constant('JSON_PRETTY_PRINT')) }}</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="mb-3">
+                        <b>Thema:</b> 5 Hotels in Mittelerde.
+                    </div>
+                    <button type="button" data-bs-toggle="modal" data-bs-target="#dataModalHotels" class="btn btn-primary">
+                        Api Response-Schema anzeigen
+                    </button>
+                    <button {{ stimulus_action('test-gemini', 'onRequestHotels') }} type="button" class="btn btn-success">
+                        Api-Request ausführen
+                    </button>
+                    <div class="modal fade" id="dataModalHotels" tabindex="-1" aria-labelledby="dataModalLabelHotels" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-scrollable modal-fullscreen">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="dataModalLabelHotels">Api Response-Schema</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <pre>{{ responseSchemaHotels|json_encode(constant('JSON_PRETTY_PRINT')) }}</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

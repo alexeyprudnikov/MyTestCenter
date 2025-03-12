@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+{% set is_edit = user is defined and user.id is not null %}
+
+{% block title %}User profile{% endblock %}
+
+{% block body %}
+    <h1>user</h1>
+
+    {{ form_errors(form) }}
+
+    {{ form_start(form) }}
+        {{ form_row(form.email) }}
+        {{ form_row(form.password.first) }}
+        {{ form_row(form.password.second) }}
+        {% if not is_edit %}
+            {{ form_row(form.roles) }}
+        {% endif %}
+        {{ form_row(form.submit, {
+            'row_attr': {'class': 'btn'},
+            'label_html': true,
+            'label': is_edit ? 'save' : 'register'
+        }) }}
+    {{ form_row(form._token) }}
+    {{ form_end(form, {'render_rest': false}) }}
+{% endblock %}

@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tests{% endblock %}
+
+{% block body %}
+    {% for test in tests %}
+        [{{ test.type.value }} / {{ test.language.value }}] <b>{{ test.title }}</b> <a href="{{ path('test_edit', {id: test.id}) }}">edit</a> <a href="{{ path('web_app_start', {hash: test.hash}) }}" target="_blank">preview</a><br>
+        {{ test.description|u.truncate(32, '...', false) }}<br><br>
+    {% endfor %}
+{% endblock %}

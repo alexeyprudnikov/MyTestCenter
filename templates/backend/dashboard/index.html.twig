@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}dashboard{% endblock %}
+
+{% block body %}
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h2>Dashboard</h2>
+        <div class="btn-toolbar mb-2 mb-md-0">
+            <div class="btn-group me-2">
+                <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
+            </div>
+        </div>
+    </div>
+    <div>
+        Welcome <b>{{ user.email }}</b>!<br><br>
+    </div>
+
+    <h2>Your tests</h2>
+    <div class="table-responsive">
+        <table class="table table-striped table-sm">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Title</th>
+                <th scope="col">Type</th>
+                <th scope="col">Language</th>
+                <th scope="col">Called</th>
+                <th scope="col">Completed</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for test in user.tests %}
+                <tr>
+                    <td>{{ test.id }}</td>
+                    <td>{{ test.title }}</td>
+                    <td>{{ test.type.value }}</td>
+                    <td>{{ test.language.value }}</td>
+                    <td>{{ test.history|length }}</td>
+                    <td>{{ test.completedHistory|length }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

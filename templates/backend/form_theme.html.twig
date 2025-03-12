@@ -1,0 +1,70 @@
+{# https://github.com/symfony/symfony/blob/6.2/src/Symfony/Bridge/Twig/Resources/views/Form/form_div_layout.html.twig #}
+{% use "form_div_layout.html.twig" %}
+
+{%- block form_row -%}
+    {%- set widget_attr = {attr: {'class': 'form-control'}} -%}
+    {%- if help is not empty -%}
+        {%- set widget_attr = {attr: widget_attr.attr|merge({'aria-describedby': id ~"_help"})} -%}
+    {%- endif -%}
+    <div{% with {attr: row_attr|merge({'class': (row_attr.class|default('') ~ ((not compound or force_error|default(false)) and not valid ? ' was-validated'))|trim})} %}{{ block('attributes') }}{% endwith %}>
+        {{- form_label(form) -}}
+        {{- form_widget(form, widget_attr) -}}
+        {{- form_help(form) -}}
+        {{- form_errors(form) -}}
+    </div>
+{%- endblock form_row -%}
+
+{%- block choice_widget_expanded -%}
+    {%- for child in form %}
+        <div class="form-check">
+            {{- form_widget(child) -}}
+            {{- form_label(child, null, {translation_domain: choice_translation_domain}) -}}
+        </div>
+    {% endfor -%}
+{%- endblock choice_widget_expanded -%}
+
+{%- block checkbox_widget -%}
+    <input type="checkbox" class="form-check-input" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %} />
+{%- endblock checkbox_widget -%}
+
+{%- block radio_widget -%}
+    <input type="radio" class="form-check-input" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %} />
+{%- endblock radio_widget -%}
+
+{%- block button_row -%}
+    {%- set widget_attr = {attr: attr|merge({'class': (attr.class|default('') ~ ' btn')|trim})} -%}
+    <div{% with {attr: row_attr} %}{{ block('attributes') }}{% endwith %}>
+        {{- form_widget(form, widget_attr) -}}
+    </div>
+{%- endblock button_row -%}
+
+{%- block form_label -%}
+    {% if label is not same as(false) -%}
+        {% if not compound -%}
+            {% set label_attr = label_attr|merge({'for': id}) %}
+        {%- endif -%}
+        {% if required -%}
+            {% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ ' form-label required')|trim}) %}
+        {%- endif -%}
+        <{{ element|default('label') }}{% if label_attr %}{% with { attr: label_attr } %}{{ block('attributes') }}{% endwith %}{% endif %}>
+        {{- block('form_label_content') -}}
+        </{{ element|default('label') }}>
+    {%- endif -%}
+{%- endblock form_label -%}
+
+{% block form_help -%}
+    {%- if help is not empty -%}
+        {%- set help_attr = help_attr|merge({'class': (help_attr.class|default('') ~ ' text-muted')|trim}) -%}
+        <{{ element|default('small') }} id="{{ id }}_help"{% with { attr: help_attr } %}{{ block('attributes') }}{% endwith %}>
+        {{- block('form_help_content') -}}
+        </{{ element|default('small') }}>
+    {%- endif -%}
+{%- endblock form_help %}
+
+{%- block form_errors -%}
+    {%- if errors|length > 0 -%}
+        {%- for error in errors -%}
+            <div class="invalid-feedback">{{ error.message|trans }}</div>
+        {%- endfor -%}
+    {%- endif %}
+{%- endblock form_errors -%}

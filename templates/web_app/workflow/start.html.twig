@@ -1,0 +1,38 @@
+{% extends 'web_app.html.twig' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block body %}
+    <div {{ stimulus_controller('web-app') }} class="container mt-3">
+        <div class="row d-flex justify-content-center">
+            <div class="col-lg-6">
+                <h4 class="mb-3">{{ isLearning ? 'E-Learning' : 'Test' }}: "{{ title }}"</h4>
+                <hr>
+                <div {{ stimulus_target('web-app', 'content') }}>
+                    <form {{ stimulus_action('web-app', 'onInitUser') }} class="needs-validation" novalidate>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">E-Mail-Adresse*</label>
+                            <input type="email" id="email" name="email" class="form-control" required aria-describedby="emailHelp">
+                            <div id="emailHelp" class="form-text">Bitte E-Mail-Adresse eingeben.</div>
+                            <div class="invalid-feedback">
+                                Bitte eine gültige E-Mail eingeben.
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="firstName" class="form-label">Vorname</label>
+                            <input type="text" id="firstName" name="first_name" class="form-control" aria-describedby="firstNameHelp">
+                            <div id="firstNameHelp" class="form-text">Bitte Vorname eingeben (optional).</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="lastName" class="form-label">Nachname</label>
+                            <input type="text" id="lastName" name="last_name" class="form-control" aria-describedby="lastNameHelp">
+                            <div id="lastNameHelp" class="form-text">Bitte Nachname eingeben (optional).</div>
+                        </div>
+                        <input type="hidden" name="test_hash" value="{{ hash }}">
+                        <input type="submit" class="btn btn-primary" value="Test starten">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

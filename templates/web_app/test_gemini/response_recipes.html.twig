@@ -1,0 +1,39 @@
+<div class="mb-4">
+    Request Ausführungszeit: {{ executionTime }} s<br>
+    <a data-bs-toggle="collapse" href="#dumpData" aria-expanded="false" aria-controls="dumpData">
+        Response-Datenstruktur anzeigen
+    </a>
+    <div class="collapse mt-4" id="dumpData">
+        <div class="card card-body">
+            {{ dump(list) }}
+        </div>
+    </div>
+</div>
+{% if list|length < 2 %}
+    Fehler: {{ list[0] ?? 'no api response data' }}
+{% else %}
+    <h3>Deutsche Lieblingsrezepte mit Fleisch</h3>
+    {% for recipe in list %}
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">{{ recipe.name }}</h5>
+                <p class="card-text">
+                    {{ recipe.cooking_instruction }}
+                </p>
+                <ul class="list-group mb-3">
+                    {% for ingredient in recipe.ingredients %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            {{ ingredient.name }}
+                            <div>
+                                <span class="badge bg-primary rounded-pill">{{ ingredient.amount }}</span>
+                                <span class="badge bg-success rounded-pill">{{ ingredient.cost }} Euro</span>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+                <p class="card-subtitle text-muted">Kochzeit ca. {{ recipe.cooking_time }}</p>
+                <p class="card-subtitle text-muted">Gesamtkosten ca. {{ recipe.total_costs }} Euro</p>
+            </div>
+        </div>
+    {% endfor %}
+{% endif %}
