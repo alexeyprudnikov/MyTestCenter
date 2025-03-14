@@ -2,9 +2,7 @@
 
 namespace App\Service;
 
-use Exception;
 use Symfony\Component\HttpClient\HttpOptions;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
@@ -39,12 +37,6 @@ class DaVinciService
         ];
     }
 
-    /**
-     * @throws RedirectionExceptionInterface
-     * @throws ClientExceptionInterface
-     * @throws TransportExceptionInterface
-     * @throws ServerExceptionInterface
-     */
     public function proceed(): array
     {
         try {
@@ -56,11 +48,11 @@ class DaVinciService
                 ]
             );
             if ($request->getStatusCode() !== 200) {
-                throw new BadRequestHttpException();
+                return ['error' => 'bad request'];
             }
             return $this->serializer->decode($request->getContent(), 'json');
-        } catch (Exception $exception) {
-            throw new $exception;
+        } catch (TransportExceptionInterface|ClientExceptionInterface|RedirectionExceptionInterface|ServerExceptionInterface $e) {
+            return ['error' => $e->getMessage()];
         }
     }
 
